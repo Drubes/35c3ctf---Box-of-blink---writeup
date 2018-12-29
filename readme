@@ -7,10 +7,7 @@ don't open the csv file in any fucking file reader thing..
 its fucking big..
 
 
-anyway it start with.
-so we can conclude that these are the logged measurements of the oscilloscope
-see.. there is some metadata like model number fw vesion settings
-ahhh. and how sweet even the labels are set and saved to the log.
+anyway it start with:
 --------------------------------------------------------------------------------
 #Model,MDO3014
 #Firmware Version,1.26
@@ -40,6 +37,10 @@ and that it continues with more than 400Mb of stings like
 -1.0000000e-03,0,0,0,0,1,0,0,0,0,0,0,1,0,1
 
 --------------------------------------------------------------------------------
+
+so we can conclude that these are the logged measurements of the oscilloscope
+there is some metadata like model number fw vesion settings
+awwwwhh, and how sweet even the labels are set and saved to the logfile.
 
 googled around a bit to see how led matrix boards are spoken to.
 
