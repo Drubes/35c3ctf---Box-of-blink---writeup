@@ -3,8 +3,8 @@ provided is a csv file and a picture of an oscilloscope with logic inputs
 connected on a data buss between a raspberry pi and 2 chained matrix boards.
 
 
-don't open the csv file in any fucking file reader thing..
-its fucking big..
+repo doesn't contain original challenge file because is't unnessesary big.
+i have made a slimmed down version using my stripfile.py scipt and reatatched headers.
 
 
 anyway it start with:
