@@ -1,0 +1,78 @@
+!!!!!!!1
+don't open the file in any fucking file reader thing..
+its fucking big..
+
+--------------------------------------------------------------------------------
+#Model,MDO3014
+#Firmware Version,1.26
+#
+#Waveform Type,DIGITAL,,,,,,,,,,,,,
+#Point Format,Y,,,,,,,,,,,,,
+#Horizontal Units,s,,,,,,,,,,,,,
+#Horizontal Scale,0.004,,,,,,,,,,,,,
+#,,,,,,,,,,,,,,
+#Sample Interval,4e-09,,,,,,,,,,,,,
+#Record Length,1e+07,,,,,,,,,,,,,
+#Gating,0.0% to 100.0%,,,,,,,,,,,,,
+#,,,,,,,,,,,,,,
+#Vertical Units,V,V,V,V,V,V,V,V,V,V,V,V,V,V
+#Threshold Used,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65
+#,,,,,,,,,,,,,,
+#,,,,,,,,,,,,,,
+#,,,,,,,,,,,,,,
+#,,,,,,,,,,,,,,
+#,,,,,,,,,,,,,,
+#Label,OE,LAT,CLK,E,D,C,B,A,B2,B1,G2,G1,R2,R1
+#TIME,D13,D12,D11,D10,D9,D8,D7,D6,D5,D4,D3,D2,D1,D0
+
+
+-1.0000000e-03,0,0,0,0,1,0,0,0,0,0,0,1,0,1
+--------------------------------------------------------------------------------
+
+
+                     /------- OUTPUT ENABLE (TURNS ALL LEDS OFF)
+                    /   /------LATCH (INDICATED END OF DATASTREAM)
+                   /   /   /-- CLOCK PULSE
+                  |   |   /  [    select rows   ][ blues][greens][reds  ]
+Label,         | OE |LAT|CLK|E  |D  |C  |B  |A  |B2 |B1 |G2 |G1 |R2 |R1 |
+TIME,          | D13|D12|D11|D10|D9 |D8 |D7 |D6 |D5 |D4 |D3 |D2 |D1 |D0 |
+-1.0000000e-03 | 0  | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 |
+
+
+anyway the file is like 400Mb so i'm not going to do this with pen and paper.
+lets see if i car write a interpreter.
+---
+written a script to remove all the uninteresting lines to reduce file size
+
+also decided it's probably a bad idea to load the whole thing in memmory,
+i already had to reboot once because i opened it in atom and my trusty piece
+antique froze up on me.
+so i decided to cat the file and pipe to the script.
+
+file: stripfile.py
+
+usage: stripfile.py 
+
+---
+noticed that there is only 5 bits available for the address maximum of 32 addresses
+got a bit worried that there was a strange hack going on
+because in the picture i see more than 32 lines on the matrix
+but then i remembered that there are 2 lines written at the same time so i
+think we're good..
+----
+
+--------------
+i stept into my hyperfocus bubble and wrote a parser
+note on that are as comments in the code
+
+got stuck for a bit because i thought that the OE needed to be troggled for output
+but as soon as kicked that bit of code out of my script every thing showed up fine
+file: blink.py
+
+usage:
+      cat blink.csv or stripped.csv to
+
+----------------
+got a flag
+
+flag is in catme.txt ;-)
