@@ -3,11 +3,12 @@ provided is a csv file and a picture of an oscilloscope with logic inputs
 connected on a data buss between a raspberry pi and 2 chained matrix boards.
 
 
-repo doesn't contain original challenge file because is't unnessesary big.
-i have made a slimmed down version using my stripfile.py scipt and reatatched headers.
+repo doesn't contain original blink.csv file because is't unnessesary big.
+i have made a slimmed down version using my stripfile.py scipt and reattached the headers.
 
 
-anyway it start with:
+
+bink.csv starts with:
 --------------------------------------------------------------------------------
 #Model,MDO3014
 #Firmware Version,1.26
