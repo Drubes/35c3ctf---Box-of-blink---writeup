@@ -1,4 +1,16 @@
 
+provided is a csv file and a picture of an oscilloscope with logic inputs
+connected on a data buss between a raspberry pi and 2 chained matrix boards.
+
+
+don't open the csv file in any fucking file reader thing..
+its fucking big..
+
+
+anyway it start with.
+so we can conclude that these are the logged measurements of the oscilloscope
+see.. there is some metadata like model number fw vesion settings
+ahhh. and how sweet even the labels are set and saved to the log.
 --------------------------------------------------------------------------------
 #Model,MDO3014
 #Firmware Version,1.26
@@ -24,8 +36,15 @@
 
 
 -1.0000000e-03,0,0,0,0,1,0,0,0,0,0,0,1,0,1
+and that it continues with more than 400Mb of stings like
+-1.0000000e-03,0,0,0,0,1,0,0,0,0,0,0,1,0,1
+
 --------------------------------------------------------------------------------
 
+googled around a bit to see how led matrix boards are spoken to.
+
+
+turns out ist something like this
 
                      /------- OUTPUT ENABLE (TURNS ALL LEDS OFF)
                     /   /------LATCH (INDICATED END OF DATASTREAM)
@@ -37,7 +56,9 @@ TIME,          | D13|D12|D11|D10|D9 |D8 |D7 |D6 |D5 |D4 |D3 |D2 |D1 |D0 |
 
 
 anyway the file is like 400Mb so i'm not going to do this with pen and paper.
-lets see if i car write a interpreter.
+lets see if i can write a parser.
+
+
 ---
 written a script to remove all the uninteresting lines to reduce file size
 
@@ -46,9 +67,11 @@ i already had to reboot once because i opened it in atom and my trusty piece
 antique froze up on me.
 so i decided to cat the file and pipe to the script.
 
-file: stripfile.py
+file:  stripfile.py
+usage: cat filename | python stripfile.py
 
-usage: stripfile.py 
+note:       output filename is hardcoded stripped.csv
+
 
 ---
 noticed that there is only 5 bits available for the address maximum of 32 addresses
@@ -59,15 +82,16 @@ think we're good..
 ----
 
 --------------
-i stept into my hyperfocus bubble and wrote a parser
-note on that are as comments in the code
+i stepped into my "hyperfocus bubble" and wrote a parser
+notes on that are as comments in the code...
 
 got stuck for a bit because i thought that the OE needed to be troggled for output
 but as soon as kicked that bit of code out of my script every thing showed up fine
-file: blink.py
 
-usage:
-      cat blink.csv or stripped.csv to
+file: blink.py
+usage: cat filename | python blink.py
+
+note:  output filename is hardcoded catme.txt
 
 ----------------
 got a flag
