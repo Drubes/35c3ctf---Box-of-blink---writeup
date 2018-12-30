@@ -9,7 +9,7 @@ i have made a slimmed down version using my stripfile.py scipt and reattached th
 provided is a csv file and a picture of an oscilloscope with logic inputs
 connected on a data buss between a raspberry pi and 2 chained matrix boards.
 
-looking at the scoop screen i quikly reconize there is some binary counting going on.
+looking at the scope screen i quikly reconize there is some binary counting going on.
 i guess this is a adress selection for the led matrix.
 
 
