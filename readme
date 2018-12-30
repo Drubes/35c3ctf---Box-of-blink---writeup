@@ -1,11 +1,16 @@
+---------------------------------------------------------------------------------------------
+!! note !! 
+this repo doesn't contain original blink.csv file because is't unnessesary big.
+i have made a slimmed down version using my stripfile.py scipt and reattached the headers.
+---------------------------------------------------------------------------------------------
+
+
 
 provided is a csv file and a picture of an oscilloscope with logic inputs
 connected on a data buss between a raspberry pi and 2 chained matrix boards.
 
-
-repo doesn't contain original blink.csv file because is't unnessesary big.
-i have made a slimmed down version using my stripfile.py scipt and reattached the headers.
-
+looking at the scoop screen i quikly reconize there is some binary counting going on.
+i guess this is a adress selection for the led matrix.
 
 
 bink.csv starts with:
@@ -43,26 +48,67 @@ so we can conclude that these are the logged measurements of the oscilloscope
 there is some metadata like model number fw vesion settings
 awwwwhh, and how sweet even the labels are set and saved to the logfile.
 
-googled around a bit to see how led matrix boards are spoken to.
+í've worked a lot with digital oscilloscopes in the past so no need to look up any inforation on this,
+since it's still in my head.
+
+but the only led matrix i've ever worked with was a home build one made from some cheap xmas-lights
+and a ir strobe light for some industial sheet metal inspection line.
+
+so i needed to find some information on the types of data busses they use to speak to rgb matrix boards.
+
+after some googeling i found a nice tutorial on how to connect a led matrix to a arduino.
+with some explanation on what each pin is used for.
+
+https://learn.adafruit.com/32x16-32x32-rgb-led-matrix/connecting-with-jumper-wires
+
+and since the labels set in the header of the blink.csv file are the same as the pinnames.
+i can conclude that this it the same type of data bus. (if they set the labels right that is)
+
+in the .csv file there is also a time stamp, i choice to ignore this data for now, hoping they kept al 
+the data in the right sequence.
 
 
-turns out ist something like this
+so we have the following signal:
 
-                     /------- OUTPUT ENABLE (TURNS ALL LEDS OFF)
+output enable bit - - to enable output.
+latch bit         - - to indicate end of data
+clock puls        - - to tell the board to read new data from the bus
+A,B,C,D,E         - - to select what line(s) to send the output to.
+R1,G1,B1          - - color data for the firs row.   
+R2,G2,B2          - - color data for the second row.
+
+
+                     /------- OUTPUT ENABLE (TURNS ALL LEDS OFF OR ON)
                     /   /------LATCH (INDICATED END OF DATASTREAM)
                    /   /   /-- CLOCK PULSE
                   |   |   /  [    select rows   ][ blues][greens][reds  ]
 Label,         | OE |LAT|CLK|E  |D  |C  |B  |A  |B2 |B1 |G2 |G1 |R2 |R1 |
-TIME,          | D13|D12|D11|D10|D9 |D8 |D7 |D6 |D5 |D4 |D3 |D2 |D1 |D0 |
 -1.0000000e-03 | 0  | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 |
 
 
-anyway the file is like 400Mb so i'm not going to do this with pen and paper.
-lets see if i can write a parser.
+
+the board 'writes' the color data from left to right to the selected line,
+latch resets the write postion to the begining of the line.
+
+there are 2 lines writen at the same time
+its a 5bit adress so that means the first line is somewere between 0 and 32 
+and the second is the same as the first +33
+
+looking at the provided picture of the matrix boad that seems to be right.
 
 
----
-written a script to remove all the uninteresting lines to reduce file size
+
+so now i know what im looking at.
+i just need to find a way to reproduce what was displayed on the matrix board. 
+
+
+------------------------------------------------------------------------------
+the sample rate of the oscilloscoop is a lot higher that the bus speed. 
+so there are a lot of mesurements that duplicate data. 
+
+
+i decided to start off by writeing a script remove all the uninteresting lines to reduce file size
+i did this by checking if the CLK,LAT or OE was chainged.  and writing a line to a new file if it did.
 
 also decided it's probably a bad idea to load the whole thing in memmory,
 i already had to reboot once because i opened it in atom and my trusty piece
@@ -73,22 +119,27 @@ file:  stripfile.py
 usage: cat filename | python stripfile.py
 
 note:       output filename is hardcoded stripped.csv
+--------------------------------------------------------------------------------
 
+while i was writing this script i was brain storming on how to output the data.
+sould i use a image libary make a html/css/js interpeter thing. 
 
----
-noticed that there is only 5 bits available for the address maximum of 32 addresses
-got a bit worried that there was a strange hack going on
-because in the picture i see more than 32 lines on the matrix
-but then i remembered that there are 2 lines written at the same time so i
-think we're good..
-----
+but i decided that it would look a lot cooler and do some honor to de demo scene 
+to output it in a terminal window. (sorry i din't respect the 24x80 terminal size)
 
---------------
-i stepped into my "hyperfocus bubble" and wrote a parser
+i knew there is a escape code to move the cursor positon in the terminal 
+and for the color of the text.
+
+--------------------------------------------------------------------------------
+
+so i continued on writing, using my stripfile.py as base for parser script.
 notes on that are as comments in the code...
 
+
 got stuck for a bit because i thought that the OE needed to be troggled for output
-but as soon as kicked that bit of code out of my script every thing showed up fine
+i had some date what looked like text could even pick up some german words.
+but i guess they used this bit to select what matrix to write to. 
+as soon as kicked that bit of code out of my script every thing showed up fine
 
 file: blink.py
 usage: cat filename | python blink.py
@@ -97,5 +148,4 @@ note:  output filename is hardcoded catme.txt
 
 ----------------
 got a flag
-
 flag is in catme.txt ;-)
